@@ -22,31 +22,9 @@ namespace chattingServer
             myConsole.AppendText(text);
             myConsole.Select(myConsole.Text.Length, 0);
             myConsole.ScrollToCaret();
-            // InsertMsg(text);// 변경 중... mysql insert
+            AddFunc addFunc = new AddFunc(this);
+            addFunc.InsertMsg(text);// 변경(영주)_mysql insert
         }
-        /*
-        public void InsertMsg(string text)
-        {
-            string[] strings = text.Split(" ");
-            int len = strings[0].Length + strings[1].Length + 1;
-            string subSTR = text.Substring(0, len);
-            string From = strings[0][1..-1];
-            string To = strings[1][1..-1];
-            string msg = text.Replace(subSTR, "");
-            string findquery = string.Format("SELECT IFNULL(MAX(채팅방목록.보낸유저), 'NULL') AS 결과 " +
-                "FROM 채팅방목록 where 보낸유저 like '{0}' AND 받는유저 like '{1}';", From, To);
-            ArrayList result = new ArrayList(DBManager.GetInstance().Select(findquery));
-            if (result[0] != "NULL")
-            {
-                int num = DBManager.GetInstance().SelectNum("select count(보낸유저) from 채팅방목록;");
-                string insertquery = string.Format("insert into 채팅방목록 (보낸유저, 받는유저, 채팅방ID) " +
-                    "values('{0}', '{1}', {2})", From, To, num);
-                DBManager.GetInstance().InsertOrUpdate(insertquery);
-            }
-            
-             
-        }
-        */
         void ControlEnter(object sender, EventArgs e)
         {
             string input = ControlInput.Text;
