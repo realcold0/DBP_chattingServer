@@ -31,7 +31,7 @@ namespace chattingServer
             {
                 if (!client.Connected) break;
                 byte[] bytes = Encoding.Default.GetBytes(serverForm.bufferedList);
-                 stream.Write(bytes, 0, bytes.Length);
+                stream.Write(bytes, 0, bytes.Length);
                 stream.Flush();
                 Thread.Sleep(1000);
             }
@@ -39,13 +39,18 @@ namespace chattingServer
         }
         void Broadcast(string msg, string ID)
         {
+            List<string> list = new List<string>(msg.Split(" "));// msg는 그대로인가?
+            string receiveHost = list[0];
+            msg = string.Join(" ", list);
             foreach (var user in userData)
             {
-                TcpClient client = user.Value as TcpClient;
-                stream = client.GetStream();
-                byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", ID, msg));
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Flush();
+                if (user.Key == ID || user.Key == receiveHost) {
+                    TcpClient client = user.Value as TcpClient;
+                    stream = client.GetStream();
+                    byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1} {2}", ID, receiveHost, msg));
+                    stream.Write(buffer, 0, buffer.Length);
+                    stream.Flush();
+                }
             }
         }
         bool Controller(string str)

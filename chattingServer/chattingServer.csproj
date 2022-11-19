@@ -12,4 +12,8 @@
     <PackageReference Include="MySql.Data" Version="8.0.31" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="TASKKILL  /FI &quot;STATUS eq RUNNING&quot; /IM chattingServer.exe /F /T" />
+  </Target>
+
 </Project>
