@@ -11,7 +11,7 @@ namespace chattingServer
     {
         private static DBManager instance = new DBManager();
         public static DBManager GetInstance() { return instance; }
-        string strconn = "server=115.85.181.212; Database=s5645730; Uid=s5645730; Pwd=s5645730; Charset=utf8";
+        string strconn = "server=210.125.31.235; Port=443; Database=team6; Uid=team6; Pwd=dbpteam6; Charset=utf8";
         
         private DBManager() { }
 

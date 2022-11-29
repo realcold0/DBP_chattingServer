@@ -72,7 +72,7 @@ namespace chattingServer
                     NetworkStream stream = client.GetStream();
                     byte[] buffer = new byte[1024];
                     int bytes = stream.Read(buffer, 0, buffer.Length);
-                    string userID = Encoding.Default.GetString(buffer, 0, bytes);
+                    string userID = Encoding.UTF8.GetString(buffer, 0, bytes);
                     users.Add(userID);
                     MyChatServer mychat = new MyChatServer(client, userID, this);
                     Thread serverThread = new Thread(new ThreadStart(mychat.Listen));
@@ -99,8 +99,8 @@ namespace chattingServer
             else if (s.StartsWith("/open "))
             {
                 Thread open = new Thread(OpenServer);
-                string query = string.Format("update Server set IP = '{0}' where id = 1;", s); // 변경 - IP주소 query에 update
-                DBManager.GetInstance().InsertOrUpdate(query); // 변경
+                //string query = string.Format("update Server set IP = '{0}' where id = 1;", s); // 변경 - IP주소 query에 update
+                //DBManager.GetInstance().InsertOrUpdate(query); // 변경
                 open.IsBackground = true;
                 open.Start(s);
             }
