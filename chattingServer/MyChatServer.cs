@@ -8,11 +8,12 @@ namespace chattingServer
 {
     class MyChatServer
     {
-        static Dictionary<string, TcpClient> userData = new Dictionary<string, TcpClient>();
+        public static Dictionary<string, TcpClient> userData = new Dictionary<string, TcpClient>();
         TcpClient client;
         NetworkStream stream = default(NetworkStream);
         string userID;
-        ChatServerForm serverForm; 
+        ChatServerForm serverForm;
+
         public MyChatServer(TcpClient client, string userID, ChatServerForm serverForm)
         {
             this.userID = userID;
@@ -25,19 +26,25 @@ namespace chattingServer
             refresher.IsBackground = true;
             refresher.Start();
         }
+
+        public Dictionary<string, TcpClient> getUserData()
+        {
+            return userData;
+        }
+
         void Refresh()
         {
             while (true)
             {
                 if (!client.Connected) break;
                 byte[] bytes = Encoding.Default.GetBytes(serverForm.bufferedList);
-                 stream.Write(bytes, 0, bytes.Length);
+                stream.Write(bytes, 0, bytes.Length);
                 stream.Flush();
                 Thread.Sleep(1000);
             }
-
         }
-        void Broadcast(string msg, string ID)
+
+        public void Broadcast(string msg, string ID)
         {
             foreach (var user in userData)
             {
@@ -48,8 +55,10 @@ namespace chattingServer
                 stream.Flush();
             }
         }
+
         bool Controller(string str)
         {
+
             bool isControlMsg = true;
             if (str.Equals("/exit"))
             {
@@ -101,8 +110,6 @@ namespace chattingServer
                 stream.Close();
                 client.Close();
             }
-
-
         }
     }
 }
