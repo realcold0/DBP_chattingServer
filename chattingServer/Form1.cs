@@ -16,7 +16,11 @@ namespace chattingServer
     {
         public string bufferedList;
         public List<string> users = new List<string>();
+        static Dictionary<string, TcpClient> userDataDict = new Dictionary<string, TcpClient>();
         TcpListener server;
+        public bool sendNotice;
+        public string noticeMsg;
+
         public void AddText(string text)
         {
             myConsole.AppendText(text);
@@ -25,6 +29,9 @@ namespace chattingServer
             AddFunc addFunc = new AddFunc(this);
             addFunc.InsertMsg(text);// 변경(영주)_mysql insert
         }
+
+
+
         void ControlEnter(object sender, EventArgs e)
         {
             string input = ControlInput.Text;
@@ -32,6 +39,7 @@ namespace chattingServer
             ControlInput.Text = string.Empty;
             ControlInput.Focus();
         }
+
         void RefreshChatters()
         {
             CheckForIllegalCrossThreadCalls = false;
@@ -47,6 +55,7 @@ namespace chattingServer
                 Thread.Sleep(1000);
             }
         }
+
         void OpenServer(object s)
         {
             string serverIP = s.ToString().Substring("/open ".Length);
@@ -75,7 +84,9 @@ namespace chattingServer
                     string userID = Encoding.UTF8.GetString(buffer, 0, bytes);
                     users.Add(userID);
                     MyChatServer mychat = new MyChatServer(client, userID, this);
+                    userDataDict = mychat.getUserData();
                     Thread serverThread = new Thread(new ThreadStart(mychat.Listen));
+                    //Thread noticeThread = new Thread(new ThreadStart(mychat.));
                     serverThread.IsBackground = true;
                     serverThread.Start();
                 }
@@ -88,6 +99,7 @@ namespace chattingServer
         {
             // 서버 닫는 처리
         }
+
         void Controller(string s)
         {
             if (s.Equals(string.Empty)) return;
@@ -95,9 +107,12 @@ namespace chattingServer
             {
                 CloseServer();
                 AddText("[Server] Closed.\r\n");
+                //state = false;
             }
             else if (s.StartsWith("/open "))
             {
+                //state = true;
+
                 Thread open = new Thread(OpenServer);
                 //string query = string.Format("update Server set IP = '{0}' where id = 1;", s); // 변경 - IP주소 query에 update
                 //DBManager.GetInstance().InsertOrUpdate(query); // 변경
@@ -108,6 +123,7 @@ namespace chattingServer
         public ChatServerForm()
         {
             InitializeComponent();
+            sendNotice = false;
         }
 
         private void ControlInput_KeyDown(object sender, KeyEventArgs e)
@@ -120,6 +136,28 @@ namespace chattingServer
             Thread refresher = new Thread(RefreshChatters);
             refresher.IsBackground = true;
             refresher.Start();
+
+        }
+
+        private void SendNoticeAll_Func(object sender, EventArgs e)
+        {
+            noticeMsg = textBox1.Text;
+
+            NetworkStream stream = default(NetworkStream);
+
+            foreach (var user in userDataDict)
+            {
+                TcpClient client = user.Value as TcpClient;
+                stream = client.GetStream();
+                byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", "server", noticeMsg));
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Flush();
+            }
+        }
+
+        private void SendNoticeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return) SendNoticeAll_Func(sender, e);
         }
     }
 }
