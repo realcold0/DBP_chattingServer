@@ -31,11 +31,10 @@
             this.myConsole = new System.Windows.Forms.RichTextBox();
             this.ClientList = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.ControlInput = new System.Windows.Forms.TextBox();
-            this.Enter = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.SendNoticeAll = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // myConsole
@@ -67,26 +66,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "참여자";
             // 
-            // ControlInput
-            // 
-            this.ControlInput.Location = new System.Drawing.Point(13, 312);
-            this.ControlInput.Margin = new System.Windows.Forms.Padding(4);
-            this.ControlInput.Name = "ControlInput";
-            this.ControlInput.Size = new System.Drawing.Size(350, 27);
-            this.ControlInput.TabIndex = 3;
-            this.ControlInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ControlInput_KeyDown);
-            // 
-            // Enter
-            // 
-            this.Enter.Location = new System.Drawing.Point(381, 312);
-            this.Enter.Margin = new System.Windows.Forms.Padding(4);
-            this.Enter.Name = "Enter";
-            this.Enter.Size = new System.Drawing.Size(155, 27);
-            this.Enter.TabIndex = 4;
-            this.Enter.Text = "Enter";
-            this.Enter.UseVisualStyleBackColor = true;
-            this.Enter.Click += new System.EventHandler(this.ControlEnter);
-            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(13, 397);
@@ -114,16 +93,25 @@
             this.SendNoticeAll.UseVisualStyleBackColor = true;
             this.SendNoticeAll.Click += new System.EventHandler(this.SendNoticeAll_Func);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(442, 440);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 29);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "서버 닫기";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ChatServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 436);
+            this.ClientSize = new System.Drawing.Size(561, 481);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.SendNoticeAll);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.Enter);
-            this.Controls.Add(this.ControlInput);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ClientList);
             this.Controls.Add(this.myConsole);
@@ -141,10 +129,11 @@
         private RichTextBox myConsole;
         private ListBox ClientList;
         private Label label1;
-        private TextBox ControlInput;
-        private Button Enter;
+        //private TextBox ControlInput;
+        //private Button Enter;
         private TextBox textBox1;
         private Label label2;
         private Button SendNoticeAll;
+        private Button button1;
     }
 }
