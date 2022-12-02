@@ -50,7 +50,7 @@ namespace chattingServer
             string chatnumquery = string.Format("select id from ChatList where sendhost like '{0}' and receivehost like '{1}';", From, To);
             int chatnum = DBManager.GetInstance().SelectNum(chatnumquery); // 채팅방ID
             DateTime nowDate = DateTime.Now;
-            string date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, '{1}', '{2}');", chatnum, msg, date);
             DBManager.GetInstance().InsertOrUpdate(chatquery); // 채팅 추가
         }
