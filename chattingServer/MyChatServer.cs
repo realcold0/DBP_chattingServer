@@ -36,11 +36,19 @@ namespace chattingServer
         {
             while (true)
             {
-                if (!client.Connected) break;
-                byte[] bytes = Encoding.Default.GetBytes(serverForm.bufferedList);
-                stream.Write(bytes, 0, bytes.Length);
-                stream.Flush();
-                Thread.Sleep(1000);
+                try
+                {
+                    if (!client.Connected) break;
+                    byte[] bytes = Encoding.Default.GetBytes(serverForm.bufferedList);
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Flush();
+                    Thread.Sleep(1000);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
+
             }
         }
 
@@ -48,11 +56,18 @@ namespace chattingServer
         {
             foreach (var user in userData)
             {
-                TcpClient client = user.Value as TcpClient;
-                stream = client.GetStream();
-                byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", ID, msg));
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Flush();
+                try
+                {
+                    TcpClient client = user.Value as TcpClient;
+                    stream = client.GetStream();
+                    byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", ID, msg));
+                    stream.Write(buffer, 0, buffer.Length);
+                    stream.Flush();
+                }
+                catch (Exception e)
+                {
+                    userData.Remove(user.Key);
+                }
             }
         }
 

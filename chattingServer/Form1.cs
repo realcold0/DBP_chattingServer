@@ -56,7 +56,7 @@ namespace chattingServer
         void OpenServer()
         {
             TcpClient client = new TcpClient();
-            const int Port = 10203;
+            const int Port = 443;
             IPEndPoint serverAddr = null;
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
@@ -65,7 +65,7 @@ namespace chattingServer
                 {
                     serverAddr = new IPEndPoint(IPAddress.Parse(ip.ToString()), Port);
                     //DB에 서버 ip 입력하기
-                    string query = "update ServerInfo set ServerIP='"+ip.ToString()+"' where ID='server'";
+                    string query = "update ServerInfo set ServerIP='" + ip.ToString() + "' where ID='server'";
                     DBManager.GetInstance().InsertOrUpdate(query);
                     //
                     break;
