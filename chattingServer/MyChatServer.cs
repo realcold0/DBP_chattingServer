@@ -46,7 +46,7 @@ namespace chattingServer
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.ToString());
+                    //MessageBox.Show(e.ToString());
                 }
 
             }
@@ -58,11 +58,15 @@ namespace chattingServer
             {
                 try
                 {
-                    TcpClient client = user.Value as TcpClient;
-                    stream = client.GetStream();
-                    byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", ID, msg));
-                    stream.Write(buffer, 0, buffer.Length);
-                    stream.Flush();
+                    //List<string> list = new List<string>(msg.Split(' '));
+                    //if (ID.Equals(user.ToString()) || list[0].Equals(user.ToString())) {
+                        TcpClient client = user.Value as TcpClient;
+                        stream = client.GetStream();
+                        byte[] buffer = Encoding.Default.GetBytes(string.Format("{0} {1}", ID, msg));
+                        stream.Write(buffer, 0, buffer.Length);
+                        stream.Flush();
+                    //}
+                    
                 }
                 catch (Exception e)
                 {
