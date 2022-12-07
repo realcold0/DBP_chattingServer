@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace chattingServer
@@ -30,7 +31,21 @@ namespace chattingServer
                 NoChatList(From, To); // 채팅방 목록 insert
 
             if (result[0].ToString() == From) // 채팅방 목록 있을 경우
+            {
+                
+                /*Regex regex = new Regex(@"[''""]", RegexOptions.IgnorePatternWhitespace);
+                List<string> list = new List<string>(text.Split(' '));
+                if (regex.IsMatch(msg))
+                {
+                    if (msg.Contains("'"))
+                    {
+                        msg.Replace("'", "\'");
+                    }
+                    text = list[0] + " " + list[1] + " " + msg;
+                }*/
+                
                 InsertChatList(From, To, text); // 메시지 insert
+            }
         }
         public void NoChatList(string From, string To)
         {
@@ -51,7 +66,28 @@ namespace chattingServer
             int chatnum = DBManager.GetInstance().SelectNum(chatnumquery); // 채팅방ID
             DateTime nowDate = DateTime.Now;
             string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, '{1}', '{2}');", chatnum, msg, date);
+            //string chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, '{1}', '{2}');", chatnum, msg, date);
+            string chatquery = string.Empty;
+
+            if (msg.Contains("'"))
+            {
+                msg.Replace("\\", "%\\");
+                chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, \"{1}\", '{2}');", chatnum, msg, date);
+            }
+
+            else if (msg.Contains("\""))
+            {
+                msg.Replace("\\", "%\\");
+                chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, '{1}', '{2}');", chatnum, msg, date);
+
+            }
+            else
+            {
+                msg.Replace("\\", "%\\");
+                chatquery = string.Format("insert into Chat (chat_id, message, time) values({0}, '{1}', '{2}');", chatnum, msg, date);
+            }
+            /*string chatquery = "insert into Chat (chat_id, message, time) values " +
+                "('" + chatnum + "', '" + msg + "', '" + date + "')"; */
             DBManager.GetInstance().InsertOrUpdate(chatquery); // 채팅 추가
         }
     }
